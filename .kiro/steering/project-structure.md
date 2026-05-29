@@ -7,6 +7,13 @@
 │   ├── globals.css         # Global styles (Tailwind)
 │   └── favicon.ico
 │
+├── components/             # Shared UI components (shadcn/ui)
+│   └── ui/
+│       └── card.tsx        # Card component (shadcn)
+│
+├── lib/                    # Shared utilities
+│   └── utils.ts            # cn() helper (clsx + tailwind-merge)
+│
 ├── locales/                # Translation files per module
 │   └── {module}/           # One folder per module (e.g. home, dashboard, auth)
 │       ├── en.ts           # English keys
@@ -21,15 +28,22 @@
 │
 ├── modules/                # Feature modules
 │   └── viewport/           # 3D viewport module
-│       ├── Viewport.tsx    # Main component (Canvas wrapper, flex-1 height)
+│       ├── Viewport.tsx    # Main component (Canvas + Theatre SheetProvider + UI overlay)
 │       ├── index.ts        # Public exports
-│       └── components/     # Internal components by category
+│       ├── animation.json  # Theatre.js exported animation state
+│       ├── store/
+│       │   └── useConfigStore.ts  # Zustand store (activeSection, selections)
+│       └── components/
 │           ├── cameras/
-│           │   └── CameraControls.tsx  # OrbitControls with damping
+│           │   └── CameraControls.tsx  # OrbitControls (zoom-out only, no below horizon)
 │           ├── lights/
 │           │   └── Lighting.tsx        # Ambient + directional light
 │           ├── models/
-│           │   └── MainScene.tsx       # GLB loader with fallback (Draco)
+│           │   └── MainScene.tsx       # gltfjsx-generated model (typed meshes)
+│           ├── ui/
+│           │   └── SectionNav/         # Floating pill toolbar (4 sections)
+│           │       └── locales/
+│           │           └── SectionNav.tsx
 │           └── Scene.tsx               # Scene composition (Suspense boundary)
 │
 ├── public/                 # Static assets
@@ -60,12 +74,32 @@
 ### 3D Models
 - GLB files go in `public/3d/{category}/{name}.glb` (Draco-compressed preferred)
 - Model components live in `modules/viewport/components/models/`
-- Each model component handles its own loading + fallback
-- Use `useGLTF(path, true)` for automatic Draco decoding
+- Model components are generated with `npx gltfjsx` then manually fixed (see tech-stack.md notes)
+- Use `useGLTF('/3d/scene/main.glb') as unknown as GLTFResult` for typed access
 - Wrap model components in `<Suspense>` in the Scene
+- The `Model` export is a named export (not default)
 
 ### Viewport components organization
 - `cameras/` — camera controls and rigs
 - `lights/` — all lighting setups
-- `models/` — GLB/GLTF model loaders
+- `models/` — GLB/GLTF model loaders (gltfjsx-generated)
+- `ui/` — overlay UI components (SectionNav, future FloatCard, BottomBar)
 - `environment/` — grids, floors, skyboxes, fog
+
+### State Management
+- Zustand store at `modules/viewport/store/useConfigStore.ts`
+- Import path: `@/modules/viewport/store/useConfigStore`
+- Sections: `"Esterni" | "Tetto" | "Interni" | "Cambusa"`
+- Default active section: `"Esterni"`
+
+### Theatre.js Animation
+- Project: `"Caravan"`, Sheet: `"Scene"`
+- Studio initialized only in development (`process.env.NODE_ENV === "development"`)
+- SheetProvider wraps the Scene inside Canvas
+- Animation state exported to `modules/viewport/animation.json`
+
+### OrbitControls constraints
+- `minDistance: 5.2` — no zoom-in beyond initial camera position
+- `maxDistance: 12` — max zoom-out
+- `maxPolarAngle: Math.PI / 2` — cannot go below the model
+- Full 360° horizontal rotation (no azimuth limits)
