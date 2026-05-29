@@ -19,19 +19,25 @@ export default function SectionNav() {
 
   return (
     <div className="flex items-center gap-1 rounded-full bg-white/95 px-1.5 py-1.5 shadow-lg backdrop-blur-sm">
-      {sections.map((section, i) => (
-        <button
-          key={section}
-          onClick={() => setActiveSection(section)}
-          className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
-            activeSection === section
-              ? "bg-gray-900 text-white"
-              : "text-gray-600 hover:text-gray-900"
-          }`}
-        >
-          {labels[section]}
-        </button>
-      ))}
+      {sections.map((section, i) => {
+        const isDisabled = section === "freeview" && activeSection === "interni";
+        return (
+          <button
+            key={section}
+            onClick={() => !isDisabled && setActiveSection(section)}
+            disabled={isDisabled}
+            className={`rounded-full px-4 py-1.5 text-sm font-medium transition-all ${
+              activeSection === section
+                ? "bg-gray-900 text-white"
+                : isDisabled
+                ? "text-gray-300 cursor-not-allowed"
+                : "text-gray-600 hover:text-gray-900"
+            }`}
+          >
+            {labels[section]}
+          </button>
+        );
+      })}
     </div>
   );
 }
