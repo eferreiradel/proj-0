@@ -5,6 +5,7 @@ import { useConfigStore } from "@/modules/viewport/store/useConfigStore";
 const options = [
   { id: "liscio", label: "Liscio", description: "Profilo aerodinamico stan..." },
   { id: "crossbars", label: "Crossbars", description: "Barre trasversali in allu..." },
+  { id: "roof_rack_full", label: "Roof Rack Full", description: "Portapacchi completo per il tetto..." },
 ] as const;
 
 type RoofOption = (typeof options)[number]["id"];

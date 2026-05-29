@@ -27,11 +27,15 @@ export function Model() {
     }
   }, [gltf.scene])
 
-  // Show/hide roof_rack based on roofOption
+  // Show/hide roof_rack and roof_rack_full based on roofOption
   useEffect(() => {
     const roofRack = gltf.scene.getObjectByName('roof_rack')
     if (roofRack) {
       roofRack.visible = roofOption === 'crossbars'
+    }
+    const roofRackFull = gltf.scene.getObjectByName('roof_rack_full')
+    if (roofRackFull) {
+      roofRackFull.visible = roofOption === 'roof_rack_full'
     }
   }, [roofOption, gltf.scene])
 
