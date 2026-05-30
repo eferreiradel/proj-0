@@ -4,12 +4,14 @@ import { Canvas } from "@react-three/fiber"
 import Scene from "./components/Scene"
 import SectionNav from "./components/ui/SectionNav/locales/SectionNav"
 import RoofOptions from "./components/ui/RoofOptions"
+import ColorPicker from "./components/ui/ColorPicker"
 
 export default function Viewport() {
   return (
-    <div className="relative w-full flex-1" style={{ background: "radial-gradient(ellipse at center, #e0e0e0 0%, #6b6b6b 100%)" }}>
+    <div className="relative w-full flex-1 overflow-hidden" style={{ background: "radial-gradient(ellipse at center, #4a4a4a 0%, #1a1a1a 100%)" }}>
       <Canvas
         shadows
+        gl={{ antialias: true }}
         camera={{ position: [15.71, 1.76, -0.88], fov: 23 }}
         style={{ width: "100%", height: "100%" }}
       >
@@ -27,6 +29,7 @@ export default function Viewport() {
       <div className="pointer-events-none absolute inset-0 flex items-center justify-end pr-6">
         <div className="pointer-events-auto">
           <RoofOptions />
+          <ColorPicker />
         </div>
       </div>
     </div>

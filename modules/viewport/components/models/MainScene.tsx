@@ -15,6 +15,7 @@ export function Model() {
   const { actions } = useAnimations(gltf.animations, gltf.scene)
   const activeSection = useConfigStore((s) => s.activeSection)
   const roofOption = useConfigStore((s) => s.roofOption)
+  const paintColor = useConfigStore((s) => s.paintColor)
 
   // Find ext_shell_r node
   const shellRef = useRef<THREE.Object3D | null>(null)
@@ -38,6 +39,19 @@ export function Model() {
       roofRackFull.visible = roofOption === 'roof_rack_full'
     }
   }, [roofOption, gltf.scene])
+
+  // Change paint color
+  useEffect(() => {
+    gltf.scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh
+        const mat = mesh.material as THREE.MeshStandardMaterial
+        if (mat?.name === 'mat_ext_paint') {
+          mat.color.set(paintColor)
+        }
+      }
+    })
+  }, [paintColor, gltf.scene])
 
   // GSAP shell slide + galley
   const prevSection = useRef(activeSection)
@@ -75,7 +89,7 @@ export function Model() {
         galleyUp.timeScale = 1
         galleyUp.reset().play()
         galleyIsOpen.current = true
-      } else if (!isGalley && activeSection !== 'freeview' && galleyIsOpen.current) {
+      } else if (!isGalley && galleyIsOpen.current) {
         // Close galley only if it was actually open
         galleyUp.timeScale = -1
         galleyUp.reset()
