@@ -5,6 +5,7 @@ import Scene from "./components/Scene"
 import SectionNav from "./components/ui/SectionNav/locales/SectionNav"
 import RoofOptions from "./components/ui/RoofOptions"
 import ColorPicker from "./components/ui/ColorPicker"
+// import LightingDebug from "./components/ui/LightingDebug"
 
 export default function Viewport() {
   return (
@@ -32,6 +33,9 @@ export default function Viewport() {
           <ColorPicker />
         </div>
       </div>
+
+      {/* Lighting Debug Panel */}
+      {/* <LightingDebug /> */}
     </div>
   )
 }

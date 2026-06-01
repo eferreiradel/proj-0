@@ -7,7 +7,7 @@ import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
 
 const MODEL_PATH = '/3d/scene/main.glb'
-const SHELL_SLIDE_Y = 5
+const SHELL_SLIDE_Y = 12
 
 export function Model() {
   const group = useRef<THREE.Group>(null!)
@@ -26,6 +26,16 @@ export function Model() {
       shellRef.current = shell
       shellOriginalY.current = shell.position.y
     }
+  }, [gltf.scene])
+
+  // Enable shadows on all meshes
+  useEffect(() => {
+    gltf.scene.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        child.castShadow = true
+        child.receiveShadow = true
+      }
+    })
   }, [gltf.scene])
 
   // Show/hide roof_rack and roof_rack_full based on roofOption

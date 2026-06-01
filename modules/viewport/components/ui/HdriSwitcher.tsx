@@ -2,7 +2,7 @@
 
 import { useConfigStore, type HdriPreset } from "@/modules/viewport/store/useConfigStore";
 
-const PRESETS: HdriPreset[] = ["studio", "sunset", "dawn", "night", "warehouse", "forest", "apartment", "lobby"];
+const PRESETS: HdriPreset[] = ["sunset", "studio", "dawn", "night", "warehouse", "forest", "apartment", "lobby", "city", "park"];
 
 export default function HdriSwitcher() {
   const hdri = useConfigStore((s) => s.hdri);
