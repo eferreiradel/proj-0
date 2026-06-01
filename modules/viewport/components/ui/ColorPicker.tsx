@@ -10,7 +10,7 @@ const colorNames: Record<string, string> = {
   "#f1faee": "Bianco Perla",
 };
 
-export default function ColorPicker() {
+export default function ColorPicker({ mobile = false }: { mobile?: boolean }) {
   const activeSection = useConfigStore((s) => s.activeSection);
   const paintColor = useConfigStore((s) => s.paintColor);
   const setPaintColor = useConfigStore((s) => s.setPaintColor);
@@ -18,7 +18,10 @@ export default function ColorPicker() {
   if (activeSection !== "esterni") return null;
 
   return (
-    <div className="w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm">
+    <div className={mobile
+      ? "w-full rounded-t-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm max-h-[40vh] overflow-y-auto"
+      : "w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm"
+    }>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-green-500" />

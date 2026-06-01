@@ -10,7 +10,7 @@ const options = [
 
 type RoofOption = (typeof options)[number]["id"];
 
-export default function RoofOptions() {
+export default function RoofOptions({ mobile = false }: { mobile?: boolean }) {
   const activeSection = useConfigStore((s) => s.activeSection);
   const roofOption = useConfigStore((s) => s.roofOption);
   const setRoofOption = useConfigStore((s) => s.setRoofOption);
@@ -18,7 +18,10 @@ export default function RoofOptions() {
   if (activeSection !== "tetto") return null;
 
   return (
-    <div className="w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm">
+    <div className={mobile
+      ? "w-full rounded-t-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm max-h-[40vh] overflow-y-auto"
+      : "w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm"
+    }>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-green-500" />

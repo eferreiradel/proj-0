@@ -27,11 +27,17 @@ export default function Viewport() {
         </div>
       </div>
 
-      {/* Right panel */}
-      <div className="pointer-events-none absolute inset-0 flex items-center justify-end pr-6">
+      {/* Config panel — right on desktop, bottom sheet on mobile */}
+      <div className="pointer-events-none absolute inset-0 hidden md:flex items-center justify-end pr-6">
         <div className="pointer-events-auto">
           <RoofOptions />
           <ColorPicker />
+        </div>
+      </div>
+      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex md:hidden justify-center pb-0">
+        <div className="pointer-events-auto w-full">
+          <RoofOptions mobile />
+          <ColorPicker mobile />
         </div>
       </div>
 
