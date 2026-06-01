@@ -33,7 +33,7 @@ export default function RootLayout({
       lang="en"
       className={cn("antialiased", geistSans.variable, geistMono.variable, "font-sans", inter.variable, playfairDisplayHeading.variable)}
     >
-      <body className="flex flex-col" style={{ height: "100dvh" }} suppressHydrationWarning>
+      <body className="flex flex-col" style={{ height: "100dvh", maxHeight: "100dvh" }} suppressHydrationWarning>
         <NextIntlClientProvider>{children}</NextIntlClientProvider>
       </body>
     </html>

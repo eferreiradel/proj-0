@@ -6,9 +6,11 @@ import SectionNav from "./components/ui/SectionNav/locales/SectionNav"
 import RoofOptions from "./components/ui/RoofOptions"
 import ColorPicker from "./components/ui/ColorPicker"
 import LoadingScreen from "./components/ui/LoadingScreen"
-// import LightingDebug from "./components/ui/LightingDebug"
+import { useConfigStore } from "./store/useConfigStore"
 
 export default function Viewport() {
+  const isLoaded = useConfigStore((s) => s.isLoaded)
+
   return (
     <div className="relative w-full flex-1 overflow-hidden" style={{ background: "radial-gradient(ellipse at center, #4a4a4a 0%, #1a1a1a 100%)" }}>
       <Canvas
@@ -20,32 +22,39 @@ export default function Viewport() {
         <Scene />
       </Canvas>
 
-      {/* Top nav */}
-      <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-6">
-        <div className="pointer-events-auto">
-          <SectionNav />
-        </div>
-      </div>
+      {/* UI overlay — only after everything is loaded */}
+      {isLoaded && (
+        <>
+          {/* Version label */}
+          <div className="pointer-events-none absolute left-4 top-4 text-xs text-white/40 font-mono">
+            proj-0 alpha v1.2
+          </div>
 
-      {/* Config panel — right on desktop, bottom sheet on mobile */}
-      <div className="pointer-events-none absolute inset-0 hidden md:flex items-center justify-end pr-6">
-        <div className="pointer-events-auto">
-          <RoofOptions />
-          <ColorPicker />
-        </div>
-      </div>
-      <div className="pointer-events-none absolute inset-x-0 bottom-0 flex md:hidden justify-center pb-0">
-        <div className="pointer-events-auto w-full">
-          <RoofOptions mobile />
-          <ColorPicker mobile />
-        </div>
-      </div>
+          {/* Top nav */}
+          <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-6">
+            <div className="pointer-events-auto">
+              <SectionNav />
+            </div>
+          </div>
+
+          {/* Config panel — right on desktop, bottom sheet on mobile */}
+          <div className="pointer-events-none absolute inset-0 hidden md:flex items-center justify-end pr-6">
+            <div className="pointer-events-auto">
+              <RoofOptions />
+              <ColorPicker />
+            </div>
+          </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex md:hidden justify-center pb-0">
+            <div className="pointer-events-auto w-full">
+              <RoofOptions mobile />
+              <ColorPicker mobile />
+            </div>
+          </div>
+        </>
+      )}
 
       {/* Loading Screen */}
       <LoadingScreen />
-
-      {/* Lighting Debug Panel */}
-      {/* <LightingDebug /> */}
     </div>
   )
 }

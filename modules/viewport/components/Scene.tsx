@@ -10,7 +10,12 @@ export default function Scene() {
   return (
     <>
       <CameraControls />
-      <CameraLogger />
+      {
+        /**
+         <CameraLogger />
+         * 
+         */
+      }
       <Lighting />
       <Suspense fallback={null}>
         <MainScene />

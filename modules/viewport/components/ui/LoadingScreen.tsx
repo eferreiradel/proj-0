@@ -2,20 +2,26 @@
 
 import { useProgress } from "@react-three/drei";
 import { useEffect, useState } from "react";
+import { useConfigStore } from "@/modules/viewport/store/useConfigStore";
 
 export default function LoadingScreen() {
-  const { active } = useProgress();
+  const { active, progress, loaded, total } = useProgress();
   const [visible, setVisible] = useState(true);
   const [opacity, setOpacity] = useState(1);
+  const setIsLoaded = useConfigStore((s) => s.setIsLoaded);
 
   useEffect(() => {
-    if (!active && visible) {
-      // Model loaded — fade out
-      setOpacity(0);
-      const timer = setTimeout(() => setVisible(false), 600);
+    // Wait until loading is done AND at least some assets were loaded
+    const done = !active && total > 0 && loaded >= total;
+    if (done && visible) {
+      const timer = setTimeout(() => {
+        setOpacity(0);
+        setIsLoaded(true);
+        setTimeout(() => setVisible(false), 600);
+      }, 200);
       return () => clearTimeout(timer);
     }
-  }, [active, visible]);
+  }, [active, loaded, total, visible, setIsLoaded]);
 
   if (!visible) return null;
 
@@ -30,7 +36,9 @@ export default function LoadingScreen() {
       }}
     >
       <div className="w-10 h-10 rounded-full border-2 border-white/20 border-t-white animate-spin mb-6" />
-      <p className="text-white/50 text-sm tracking-widest uppercase">Loading</p>
+      <p className="text-white/50 text-sm tracking-widest uppercase">
+        Loading {Math.round(progress)}%
+      </p>
     </div>
   );
 }

@@ -20,6 +20,8 @@ interface ConfigState {
   setHdri: (preset: HdriPreset) => void;
   paintColor: PaintColor;
   setPaintColor: (color: PaintColor) => void;
+  isLoaded: boolean;
+  setIsLoaded: (loaded: boolean) => void;
 }
 
 export const useConfigStore = create<ConfigState>((set) => ({
@@ -33,4 +35,6 @@ export const useConfigStore = create<ConfigState>((set) => ({
   setHdri: (preset) => set({ hdri: preset }),
   paintColor: "#f1faee",
   setPaintColor: (color) => set({ paintColor: color }),
+  isLoaded: false,
+  setIsLoaded: (loaded) => set({ isLoaded: loaded }),
 }));

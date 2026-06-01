@@ -1,17 +1,15 @@
 "use client";
 
 import { Environment, ContactShadows } from "@react-three/drei";
-import { useConfigStore } from "@/modules/viewport/store/useConfigStore";
 import { useLightingStore } from "../ui/LightingDebug";
 
 export default function Lighting() {
-  const hdri = useConfigStore((s) => s.hdri);
   const params = useLightingStore((s) => s.params);
 
   return (
     <>
       <Environment
-        preset={hdri}
+        files="/hdri/venice_sunset_1k.hdr"
         background={false}
         environmentRotation={[0, params.environmentRotation, 0]}
       />

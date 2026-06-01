@@ -3,11 +3,11 @@
 import { PAINT_COLORS, useConfigStore } from "@/modules/viewport/store/useConfigStore";
 
 const colorNames: Record<string, string> = {
-  "#e63946": "Rosso Corsa",
-  "#457b9d": "Blu Oceano",
-  "#f4a261": "Arancio Sahara",
-  "#2a9d8f": "Verde Menta",
-  "#f1faee": "Bianco Perla",
+  "#e63946": "Racing Red",
+  "#457b9d": "Ocean Blue",
+  "#f4a261": "Sahara Orange",
+  "#2a9d8f": "Mint Green",
+  "#f1faee": "Pearl White",
 };
 
 export default function ColorPicker({ mobile = false }: { mobile?: boolean }) {
@@ -25,7 +25,7 @@ export default function ColorPicker({ mobile = false }: { mobile?: boolean }) {
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-green-500" />
-          <span className="text-sm font-semibold text-gray-900">Colore</span>
+          <span className="text-sm font-semibold text-gray-900">Color</span>
         </div>
       </div>
 
