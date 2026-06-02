@@ -8,7 +8,10 @@ import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
 
 const MODEL_PATH = '/3d/scene/main.glb'
-const LIGHTMAP_PATH = '/3d/scene/interior_lightmap_day.hdr'
+const LIGHTMAP_PATHS = {
+  day: '/3d/scene/interior_lightmap_day.hdr',
+  night: '/3d/scene/interior_lightmap_night.hdr',
+}
 const SHELL_SLIDE_Y = 12
 
 export function Model() {
@@ -95,22 +98,24 @@ export function Model() {
     }
   }, [gltf.scene])
 
-  // Load and apply interior lightmap to 'interior' mesh
+  // Load and apply interior lightmap based on day/night mode
   useEffect(() => {
     const mesh = gltf.scene.getObjectByName('interior') as THREE.Mesh
     if (!mesh) return
 
-    new RGBELoader().load(LIGHTMAP_PATH, (tex) => {
+    const path = LIGHTMAP_PATHS[interiorMode]
+    new RGBELoader().load(path, (tex) => {
       tex.colorSpace = THREE.NoColorSpace
       tex.mapping = THREE.UVMapping
       tex.flipY = false
 
       const mat = mesh.material as THREE.MeshStandardMaterial
+      if (mat.lightMap) mat.lightMap.dispose()
       mat.lightMap = tex
       mat.lightMapIntensity = 20.0
       mat.needsUpdate = true
     })
-  }, [gltf.scene])
+  }, [gltf.scene, interiorMode])
 
   // Swap interior material based on day/night mode
   useEffect(() => {
