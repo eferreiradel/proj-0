@@ -3,7 +3,7 @@
 import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
 
