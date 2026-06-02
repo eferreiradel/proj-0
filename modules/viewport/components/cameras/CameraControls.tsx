@@ -75,6 +75,8 @@ export default function CameraControls() {
       target={lookAtTarget.current}
       enableZoom={true}
       enablePan={false}
+      autoRotate
+      autoRotateSpeed={1}
     />
   );
 }
