@@ -3,10 +3,12 @@
 import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader'
 import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
 
 const MODEL_PATH = '/3d/scene/main.glb'
+const LIGHTMAP_PATH = '/3d/scene/interior_lightmap_day.hdr'
 const SHELL_SLIDE_Y = 12
 
 export function Model() {
@@ -91,6 +93,23 @@ export function Model() {
         if (mesh.isMesh) interiorMeshes.current.push(mesh)
       })
     }
+  }, [gltf.scene])
+
+  // Load and apply interior lightmap to 'interior' mesh
+  useEffect(() => {
+    const mesh = gltf.scene.getObjectByName('interior') as THREE.Mesh
+    if (!mesh) return
+
+    new RGBELoader().load(LIGHTMAP_PATH, (tex) => {
+      tex.colorSpace = THREE.NoColorSpace
+      tex.mapping = THREE.UVMapping
+      tex.flipY = false
+
+      const mat = mesh.material as THREE.MeshStandardMaterial
+      mat.lightMap = tex
+      mat.lightMapIntensity = 20.0
+      mat.needsUpdate = true
+    })
   }, [gltf.scene])
 
   // Swap interior material based on day/night mode

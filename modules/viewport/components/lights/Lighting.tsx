@@ -13,17 +13,17 @@ export default function Lighting() {
         background={false}
         environmentRotation={[0, params.environmentRotation, 0]}
       />
-      <ambientLight intensity={params.ambientIntensity} />
+      <ambientLight intensity={0} />
       <directionalLight
         position={[params.directionalX, params.directionalY, params.directionalZ]}
-        intensity={params.directionalIntensity}
+        intensity={0}
         castShadow
       />
-      
+
       {/* Point light for interior illumination */}
       <pointLight
         position={[params.pointLightX, params.pointLightY, params.pointLightZ]}
-        intensity={params.pointLightIntensity}
+        intensity={0}
         distance={20}
         decay={2}
       />
