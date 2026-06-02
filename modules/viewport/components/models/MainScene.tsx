@@ -16,6 +16,7 @@ export function Model() {
   const activeSection = useConfigStore((s) => s.activeSection)
   const roofOption = useConfigStore((s) => s.roofOption)
   const paintColor = useConfigStore((s) => s.paintColor)
+  const interiorMode = useConfigStore((s) => s.interiorMode)
 
   // Find ext_shell_r node
   const shellRef = useRef<THREE.Object3D | null>(null)
@@ -62,6 +63,44 @@ export function Model() {
       }
     })
   }, [paintColor, gltf.scene])
+
+  // Cache interior day/night materials + the shell_body.002 meshes
+  const dayMat = useRef<THREE.Material | null>(null)
+  const nightMat = useRef<THREE.Material | null>(null)
+  const interiorMeshes = useRef<THREE.Mesh[]>([])
+  useEffect(() => {
+    // Grab both interior materials wherever they appear in the scene
+    gltf.scene.traverse((child) => {
+      const mesh = child as THREE.Mesh
+      if (!mesh.isMesh) return
+      const mat = mesh.material as THREE.Material
+      if (mat?.name === 'mat_interior_day' && !dayMat.current) dayMat.current = mat
+      if (mat?.name === 'mat_interior_night' && !nightMat.current) nightMat.current = mat
+    })
+
+    // Locate the shell_body.002 node (three.js may sanitize the dot)
+    const shellInterior =
+      gltf.scene.getObjectByName('shell_body.002') ??
+      gltf.scene.getObjectByName('shell_body002') ??
+      gltf.scene.getObjectByName('shell_body_002')
+
+    interiorMeshes.current = []
+    if (shellInterior) {
+      shellInterior.traverse((child) => {
+        const mesh = child as THREE.Mesh
+        if (mesh.isMesh) interiorMeshes.current.push(mesh)
+      })
+    }
+  }, [gltf.scene])
+
+  // Swap interior material based on day/night mode
+  useEffect(() => {
+    const target = interiorMode === 'day' ? dayMat.current : nightMat.current
+    if (!target) return
+    interiorMeshes.current.forEach((mesh) => {
+      mesh.material = target
+    })
+  }, [interiorMode, gltf.scene])
 
   // GSAP shell slide + galley
   const prevSection = useRef(activeSection)

@@ -5,6 +5,7 @@ export type Section = (typeof sections)[number];
 
 export type RoofOption = "liscio" | "crossbars" | "roof_rack_full";
 export type HdriPreset = "studio" | "sunset" | "dawn" | "night" | "warehouse" | "forest" | "apartment" | "lobby" | "city" | "park";
+export type InteriorMode = "day" | "night";
 
 export const PAINT_COLORS = ["#f1faee", "#e63946", "#457b9d", "#f4a261", "#2a9d8f"] as const;
 export type PaintColor = (typeof PAINT_COLORS)[number];
@@ -20,6 +21,8 @@ interface ConfigState {
   setHdri: (preset: HdriPreset) => void;
   paintColor: PaintColor;
   setPaintColor: (color: PaintColor) => void;
+  interiorMode: InteriorMode;
+  setInteriorMode: (mode: InteriorMode) => void;
   isLoaded: boolean;
   setIsLoaded: (loaded: boolean) => void;
 }
@@ -35,6 +38,8 @@ export const useConfigStore = create<ConfigState>((set) => ({
   setHdri: (preset) => set({ hdri: preset }),
   paintColor: "#f1faee",
   setPaintColor: (color) => set({ paintColor: color }),
+  interiorMode: "day",
+  setInteriorMode: (mode) => set({ interiorMode: mode }),
   isLoaded: false,
   setIsLoaded: (loaded) => set({ isLoaded: loaded }),
 }));

@@ -5,6 +5,7 @@ import Scene from "./components/Scene"
 import SectionNav from "./components/ui/SectionNav/locales/SectionNav"
 import RoofOptions from "./components/ui/RoofOptions"
 import ColorPicker from "./components/ui/ColorPicker"
+import InteriorModeSwitch from "./components/ui/InteriorMode"
 import LoadingScreen from "./components/ui/LoadingScreen"
 import { useConfigStore } from "./store/useConfigStore"
 
@@ -42,12 +43,14 @@ export default function Viewport() {
             <div className="pointer-events-auto">
               <RoofOptions />
               <ColorPicker />
+              <InteriorModeSwitch />
             </div>
           </div>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 flex md:hidden justify-center pb-0">
             <div className="pointer-events-auto w-full">
               <RoofOptions mobile />
               <ColorPicker mobile />
+              <InteriorModeSwitch mobile />
             </div>
           </div>
         </>
