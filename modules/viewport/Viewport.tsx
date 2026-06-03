@@ -15,9 +15,10 @@ export default function Viewport() {
   return (
     <div className="relative w-full flex-1 overflow-hidden" style={{ background: "radial-gradient(ellipse at center, #4a4a4a 0%, #1a1a1a 100%)" }}>
       <Canvas
-        shadows
-        gl={{ antialias: true }}
+        dpr={[1, 1.5]}
+        gl={{ antialias: true, powerPreference: "high-performance" }}
         camera={{ position: [15.71, 1.76, -0.88], fov: 23 }}
+        performance={{ min: 0.5 }}
         style={{ width: "100%", height: "100%" }}
       >
         <Scene />
@@ -50,7 +51,7 @@ export default function Viewport() {
             <div className="pointer-events-auto w-full">
               <RoofOptions mobile />
               <ColorPicker mobile />
-              <InteriorModeSwitch mobile />
+              <InteriorModeSwitch />
             </div>
           </div>
         </>

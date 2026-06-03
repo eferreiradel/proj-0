@@ -34,16 +34,6 @@ export function Model() {
     }
   }, [gltf.scene])
 
-  // Enable shadows on all meshes
-  useEffect(() => {
-    gltf.scene.traverse((child) => {
-      if ((child as THREE.Mesh).isMesh) {
-        child.castShadow = true
-        child.receiveShadow = true
-      }
-    })
-  }, [gltf.scene])
-
   // Show/hide roof_rack and roof_rack_full based on roofOption
   useEffect(() => {
     const roofRack = gltf.scene.getObjectByName('roof_rack')
@@ -68,6 +58,34 @@ export function Model() {
       }
     })
   }, [paintColor, gltf.scene])
+
+  // Ground shadow: apply alpha-mapped texture to the Ground plane
+  useEffect(() => {
+    const ground = gltf.scene.getObjectByName('Ground') as THREE.Mesh
+    if (!ground) return
+
+    const loader = new THREE.TextureLoader()
+    const shadowTex = loader.load('/3d/scene/lightmap_ground.png', (tex) => {
+      tex.colorSpace = THREE.NoColorSpace
+      tex.flipY = false
+      tex.anisotropy = 4
+    })
+
+    const oldMat = ground.material as THREE.Material
+    ground.material = new THREE.MeshBasicMaterial({
+      color: 0x000000,
+      alphaMap: shadowTex,
+      transparent: true,
+      depthWrite: false,
+      opacity: 0.7,
+    })
+    ground.renderOrder = 1
+    if (oldMat && oldMat !== ground.material) oldMat.dispose?.()
+
+    return () => {
+      shadowTex.dispose()
+    }
+  }, [gltf.scene])
 
   // Cache interior day/night materials + the shell_body.002 meshes
   const dayMat = useRef<THREE.Material | null>(null)
@@ -98,22 +116,33 @@ export function Model() {
     }
   }, [gltf.scene])
 
-  // Load and apply interior lightmap based on day/night mode
+  // Load and apply interior lightmap based on day/night mode (cached, no re-decode on switch)
+  const lightmapCache = useRef<Record<string, THREE.Texture>>({})
   useEffect(() => {
     const mesh = gltf.scene.getObjectByName('interior') as THREE.Mesh
     if (!mesh) return
+
+    const applyLightmap = (tex: THREE.Texture) => {
+      const mat = mesh.material as THREE.MeshStandardMaterial
+      if (mat.lightMap === tex) return
+      mat.lightMap = tex
+      mat.lightMapIntensity = 20.0
+      mat.needsUpdate = true
+    }
+
+    const cached = lightmapCache.current[interiorMode]
+    if (cached) {
+      applyLightmap(cached)
+      return
+    }
 
     const path = LIGHTMAP_PATHS[interiorMode]
     new RGBELoader().load(path, (tex) => {
       tex.colorSpace = THREE.NoColorSpace
       tex.mapping = THREE.UVMapping
       tex.flipY = false
-
-      const mat = mesh.material as THREE.MeshStandardMaterial
-      if (mat.lightMap) mat.lightMap.dispose()
-      mat.lightMap = tex
-      mat.lightMapIntensity = 20.0
-      mat.needsUpdate = true
+      lightmapCache.current[interiorMode] = tex
+      applyLightmap(tex)
     })
   }, [gltf.scene, interiorMode])
 

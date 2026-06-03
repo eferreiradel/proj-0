@@ -10,7 +10,7 @@ import gsap from "gsap";
 const POSITIONS: Record<string, [number, number, number]> = {
   esterni: [15.71, 1.76, -0.88],
   tetto: [9.3, 10.2, -9.9],
-  interni: [11, 1.3, -0.63],
+  interni: [13.5, 1.4, -0.77],
   galley: [8.8, 3.2, 11.8],
 };
 
@@ -75,8 +75,8 @@ export default function CameraControls() {
       target={lookAtTarget.current}
       enableZoom={true}
       enablePan={false}
-      autoRotate
-      autoRotateSpeed={1}
+      // autoRotate
+      // autoRotateSpeed={1}
     />
   );
 }
