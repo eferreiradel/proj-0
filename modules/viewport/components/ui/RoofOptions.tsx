@@ -3,14 +3,14 @@
 import { useConfigStore } from "@/modules/viewport/store/useConfigStore";
 
 const options = [
-  { id: "liscio", label: "Liscio", description: "Profilo aerodinamico stan..." },
-  { id: "crossbars", label: "Crossbars", description: "Barre trasversali in allu..." },
-  { id: "roof_rack_full", label: "Roof Rack Full", description: "Portapacchi completo per il tetto..." },
+  { id: "liscio", label: "Smooth", description: "Standard aerodynamic profile..." },
+  { id: "crossbars", label: "Crossbars", description: "Aluminium crossbars..." },
+  { id: "roof_rack_full", label: "Roof Rack Full", description: "Full roof rack for the top..." },
 ] as const;
 
 type RoofOption = (typeof options)[number]["id"];
 
-export default function RoofOptions() {
+export default function RoofOptions({ mobile = false }: { mobile?: boolean }) {
   const activeSection = useConfigStore((s) => s.activeSection);
   const roofOption = useConfigStore((s) => s.roofOption);
   const setRoofOption = useConfigStore((s) => s.setRoofOption);
@@ -18,11 +18,14 @@ export default function RoofOptions() {
   if (activeSection !== "tetto") return null;
 
   return (
-    <div className="w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm">
+    <div className={mobile
+      ? "w-full rounded-t-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm max-h-[40vh] overflow-y-auto"
+      : "w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm"
+    }>
       <div className="mb-3 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="h-2 w-2 rounded-full bg-green-500" />
-          <span className="text-sm font-semibold text-gray-900">Configurazione</span>
+          <span className="text-sm font-semibold text-gray-900">Configuration</span>
         </div>
         <span className="text-xs text-gray-400">
           {options.findIndex((o) => o.id === roofOption) + 1} / {options.length}

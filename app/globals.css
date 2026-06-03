@@ -128,3 +128,11 @@
     @apply font-sans;
   }
 }
+
+/* Mobile viewport fix — usa dvh invece di vh per evitare il clipping della barra browser */
+@media (max-width: 767px) {
+  html, body {
+    height: 100dvh;
+    overflow: hidden;
+  }
+}

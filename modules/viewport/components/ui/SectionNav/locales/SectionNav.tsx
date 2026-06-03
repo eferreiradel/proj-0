@@ -3,9 +3,9 @@
 import { sections, useConfigStore } from "@/modules/viewport/store/useConfigStore";
 
 const labels: Record<string, string> = {
-  esterni: "Esterno",
-  tetto: "Tetto",
-  interni: "Interni",
+  esterni: "Exterior",
+  tetto: "Roof",
+  interni: "Interior",
   galley: "Galley",
 };
 
