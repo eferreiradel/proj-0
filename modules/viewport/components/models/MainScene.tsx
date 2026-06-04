@@ -22,6 +22,7 @@ export function Model() {
   const roofOption = useConfigStore((s) => s.roofOption)
   const paintColor = useConfigStore((s) => s.paintColor)
   const interiorMode = useConfigStore((s) => s.interiorMode)
+  const setLightmapsReady = useConfigStore((s) => s.setLightmapsReady)
 
   // Find ext_shell_r node
   const shellRef = useRef<THREE.Object3D | null>(null)
@@ -116,8 +117,32 @@ export function Model() {
     }
   }, [gltf.scene])
 
-  // Load and apply interior lightmap based on day/night mode (cached, no re-decode on switch)
+  // Preload BOTH interior lightmaps up-front so the day/night switch is instant
   const lightmapCache = useRef<Record<string, THREE.Texture>>({})
+  useEffect(() => {
+    let cancelled = false
+    const loader = new RGBELoader()
+
+    const loadOne = (mode: 'day' | 'night') =>
+      new Promise<void>((resolve) => {
+        loader.load(LIGHTMAP_PATHS[mode], (tex) => {
+          tex.colorSpace = THREE.NoColorSpace
+          tex.mapping = THREE.UVMapping
+          tex.flipY = false
+          lightmapCache.current[mode] = tex
+          resolve()
+        }, undefined, () => resolve())
+      })
+
+    setLightmapsReady(false)
+    Promise.all([loadOne('day'), loadOne('night')]).then(() => {
+      if (!cancelled) setLightmapsReady(true)
+    })
+
+    return () => { cancelled = true }
+  }, [setLightmapsReady])
+
+  // Apply interior lightmap based on day/night mode (from preloaded cache)
   useEffect(() => {
     const mesh = gltf.scene.getObjectByName('interior') as THREE.Mesh
     if (!mesh) return
@@ -136,8 +161,8 @@ export function Model() {
       return
     }
 
-    const path = LIGHTMAP_PATHS[interiorMode]
-    new RGBELoader().load(path, (tex) => {
+    // Fallback: load on demand if preload hasn't finished yet
+    new RGBELoader().load(LIGHTMAP_PATHS[interiorMode], (tex) => {
       tex.colorSpace = THREE.NoColorSpace
       tex.mapping = THREE.UVMapping
       tex.flipY = false
