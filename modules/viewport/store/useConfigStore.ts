@@ -23,6 +23,8 @@ interface ConfigState {
   setPaintColor: (color: PaintColor) => void;
   interiorMode: InteriorMode;
   setInteriorMode: (mode: InteriorMode) => void;
+  lightmapsReady: boolean;
+  setLightmapsReady: (ready: boolean) => void;
   isLoaded: boolean;
   setIsLoaded: (loaded: boolean) => void;
 }
@@ -40,6 +42,8 @@ export const useConfigStore = create<ConfigState>((set) => ({
   setPaintColor: (color) => set({ paintColor: color }),
   interiorMode: "day",
   setInteriorMode: (mode) => set({ interiorMode: mode }),
+  lightmapsReady: false,
+  setLightmapsReady: (ready) => set({ lightmapsReady: ready }),
   isLoaded: false,
   setIsLoaded: (loaded) => set({ isLoaded: loaded }),
 }));

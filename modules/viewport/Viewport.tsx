@@ -6,6 +6,7 @@ import SectionNav from "./components/ui/SectionNav/locales/SectionNav"
 import RoofOptions from "./components/ui/RoofOptions"
 import ColorPicker from "./components/ui/ColorPicker"
 import InteriorModeSwitch from "./components/ui/InteriorMode"
+import GalleyWip from "./components/ui/GalleyWip"
 import LoadingScreen from "./components/ui/LoadingScreen"
 import { useConfigStore } from "./store/useConfigStore"
 
@@ -39,19 +40,13 @@ export default function Viewport() {
             </div>
           </div>
 
-          {/* Config panel — right on desktop, bottom sheet on mobile */}
-          <div className="pointer-events-none absolute inset-0 hidden md:flex items-center justify-end pr-6">
-            <div className="pointer-events-auto">
+          {/* Bottom card — section controls, expands/contracts to fit content */}
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-6">
+            <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-300">
               <RoofOptions />
               <ColorPicker />
               <InteriorModeSwitch />
-            </div>
-          </div>
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex md:hidden justify-center pb-0">
-            <div className="pointer-events-auto w-full">
-              <RoofOptions mobile />
-              <ColorPicker mobile />
-              <InteriorModeSwitch />
+              <GalleyWip />
             </div>
           </div>
         </>

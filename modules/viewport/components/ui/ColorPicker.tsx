@@ -10,7 +10,7 @@ const colorNames: Record<string, string> = {
   "#f1faee": "Pearl White",
 };
 
-export default function ColorPicker({ mobile = false }: { mobile?: boolean }) {
+export default function ColorPicker() {
   const activeSection = useConfigStore((s) => s.activeSection);
   const paintColor = useConfigStore((s) => s.paintColor);
   const setPaintColor = useConfigStore((s) => s.setPaintColor);
@@ -18,38 +18,22 @@ export default function ColorPicker({ mobile = false }: { mobile?: boolean }) {
   if (activeSection !== "esterni") return null;
 
   return (
-    <div className={mobile
-      ? "w-full rounded-t-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm max-h-[40vh] overflow-y-auto"
-      : "w-64 rounded-2xl bg-white/95 p-4 shadow-lg backdrop-blur-sm"
-    }>
-      <div className="mb-3 flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <div className="h-2 w-2 rounded-full bg-green-500" />
-          <span className="text-sm font-semibold text-gray-900">Color</span>
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-1.5">
-        {PAINT_COLORS.map((color) => (
+    <div className="flex items-center gap-2 px-1">
+      {PAINT_COLORS.map((color) => {
+        const isActive = paintColor === color;
+        return (
           <button
             key={color}
             onClick={() => setPaintColor(color)}
-            className={`flex items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-all ${
-              paintColor === color
-                ? "bg-gray-100 ring-1 ring-gray-300"
-                : "hover:bg-gray-50"
+            aria-label={colorNames[color] ?? color}
+            title={colorNames[color] ?? color}
+            className={`relative h-7 w-7 rounded-full border transition-transform hover:scale-110 ${
+              isActive ? "border-gray-900 ring-2 ring-gray-900 ring-offset-2 ring-offset-white" : "border-gray-200"
             }`}
-          >
-            <div
-              className="h-7 w-7 rounded-full border border-gray-200"
-              style={{ backgroundColor: color }}
-            />
-            <span className="text-sm font-medium text-gray-900">
-              {colorNames[color] ?? color}
-            </span>
-          </button>
-        ))}
-      </div>
+            style={{ backgroundColor: color }}
+          />
+        );
+      })}
     </div>
   );
 }
