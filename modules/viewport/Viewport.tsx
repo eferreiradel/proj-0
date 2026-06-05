@@ -42,7 +42,7 @@ export default function Viewport() {
 
           {/* Bottom card — section controls, expands/contracts to fit content */}
           <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-6">
-            <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-300">
+            <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/10 px-3 py-2 shadow-lg backdrop-blur-md border border-white/15 transition-all duration-300">
               <RoofOptions />
               <ColorPicker />
               <InteriorModeSwitch />

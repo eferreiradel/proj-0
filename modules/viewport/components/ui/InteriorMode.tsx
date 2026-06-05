@@ -15,33 +15,37 @@ export default function InteriorModeSwitch() {
 
   return (
     <div className="flex items-center gap-3 px-1">
-      <span className="text-sm font-medium text-gray-600">
+      <span className="text-sm font-medium text-white/70">
         {isNight ? "Night" : "Day"}
       </span>
-      {/* Custom switch with icons inside thumb */}
       <button
         onClick={() => setInteriorMode(isNight ? "day" : "night")}
         disabled={!lightmapsReady}
         aria-label={isNight ? "Switch to day" : "Switch to night"}
-        className={`relative inline-flex h-8 w-16 items-center rounded-full transition-colors duration-300 focus:outline-none ${
-          !lightmapsReady ? "cursor-not-allowed opacity-70" : ""
-        } ${isNight ? "bg-gray-400" : "bg-gray-200"}`}
+        className={`
+          relative inline-flex h-8 w-16 items-center rounded-full
+          transition-colors duration-300 focus:outline-none
+          ${!lightmapsReady ? "cursor-not-allowed opacity-50" : ""}
+          ${isNight ? "bg-white/20" : "bg-white/10"}
+          border border-white/20
+        `}
       >
-        {/* Track icons */}
-        <Sun className={`absolute left-1.5 h-4 w-4 opacity-60 text-gray-700`} />
-        <Moon className={`absolute right-1.5 h-4 w-4 opacity-60 text-gray-700`} />
+        <Sun  className="absolute left-1.5 h-4 w-4 text-white/40" />
+        <Moon className="absolute right-1.5 h-4 w-4 text-white/40" />
 
-        {/* Thumb with active icon (or spinner while lightmaps load) */}
         <span
-          className={`relative z-10 flex h-6 w-6 items-center justify-center rounded-full bg-white shadow-md transition-transform duration-300 ${
-            isNight ? "translate-x-9" : "translate-x-1"
-          }`}
+          className={`
+            relative z-10 flex h-6 w-6 items-center justify-center
+            rounded-full bg-white shadow-md
+            transition-transform duration-300
+            ${isNight ? "translate-x-9" : "translate-x-1"}
+          `}
         >
           {!lightmapsReady
             ? <Loader2 className="h-3.5 w-3.5 animate-spin text-gray-900" />
             : isNight
               ? <Moon className="h-3.5 w-3.5 text-gray-900" />
-              : <Sun className="h-3.5 w-3.5 text-gray-900" />
+              : <Sun  className="h-3.5 w-3.5 text-gray-900" />
           }
         </span>
       </button>
