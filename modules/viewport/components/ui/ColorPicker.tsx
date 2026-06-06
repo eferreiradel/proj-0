@@ -27,9 +27,13 @@ export default function ColorPicker() {
             onClick={() => setPaintColor(color)}
             aria-label={colorNames[color] ?? color}
             title={colorNames[color] ?? color}
-            className={`relative h-7 w-7 rounded-full border transition-transform hover:scale-110 ${
-              isActive ? "border-gray-900 ring-2 ring-gray-900 ring-offset-2 ring-offset-white" : "border-gray-200"
-            }`}
+            className={`
+              relative h-7 w-7 rounded-full border-2 transition-all duration-150 hover:scale-110 active:scale-95
+              ${isActive
+                ? "border-white ring-2 ring-white ring-offset-2 ring-offset-transparent"
+                : "border-white/30 hover:border-white/60"
+              }
+            `}
             style={{ backgroundColor: color }}
           />
         );

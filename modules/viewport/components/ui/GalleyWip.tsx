@@ -9,7 +9,7 @@ export default function GalleyWip() {
   if (activeSection !== "galley") return null;
 
   return (
-    <div className="flex items-center gap-2 px-2 text-gray-600">
+    <div className="flex items-center gap-2 px-2 text-white/50">
       <Wrench className="h-4 w-4" />
       <span className="text-sm font-medium">Work in progress</span>
     </div>
