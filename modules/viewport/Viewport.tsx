@@ -33,22 +33,38 @@ export default function Viewport() {
             proj-0 alpha v1.2
           </div>
 
+          {/* Big title overlay */}
+          {
+            /**
+             * 
+          <h1 className="pointer-events-none absolute labsolute inset-30 font-[family-name:var(--font-heading)] text-6xl md:text-8xl lg:text-9xl leading-none tracking-tight text-white/90 drop-shadow-lg">
+            TEAR
+          </h1>
+           <h1 className="pointer-events-none absolute labsolute inset-60 font-[family-name:var(--font-heading)] text-6xl md:text-8xl lg:text-9xl leading-none tracking-tight text-white/90 drop-shadow-lg">
+            DROP
+          </h1>
+             */
+          }
+          
+
           {/* Top nav */}
-          <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-6">
-            <div className="pointer-events-auto">
-              <SectionNav />
+
+            <div className="pointer-events-none absolute inset-0 flex items-start justify-center pt-6">
+              <div className="pointer-events-auto">
+                <SectionNav />
+              </div>
             </div>
-          </div>
+        
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-6">
+              <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-300">
+                <RoofOptions />
+                <ColorPicker />
+                <InteriorModeSwitch />
+                <GalleyWip />
+              </div>
+            </div>
 
           {/* Bottom card — section controls, expands/contracts to fit content */}
-          <div className="pointer-events-none absolute inset-x-0 bottom-0 flex justify-center pb-6">
-            <div className="pointer-events-auto flex items-center gap-1 rounded-full bg-white/95 px-3 py-2 shadow-lg backdrop-blur-sm transition-all duration-300">
-              <RoofOptions />
-              <ColorPicker />
-              <InteriorModeSwitch />
-              <GalleyWip />
-            </div>
-          </div>
         </>
       )}
 
