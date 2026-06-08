@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export const sections = ["esterni", "tetto", "interni", "galley"] as const;
+export const sections = ["esterni", "tetto", "interni", "galley", "checkout"] as const;
 export type Section = (typeof sections)[number];
 
 export type RoofOption = "liscio" | "crossbars" | "roof_rack_full";
@@ -21,6 +21,8 @@ interface ConfigState {
   setHdri: (preset: HdriPreset) => void;
   paintColor: PaintColor;
   setPaintColor: (color: PaintColor) => void;
+  optionals: string[];
+  toggleOptional: (id: string) => void;
   interiorMode: InteriorMode;
   setInteriorMode: (mode: InteriorMode) => void;
   lightmapsReady: boolean;
@@ -40,6 +42,13 @@ export const useConfigStore = create<ConfigState>((set) => ({
   setHdri: (preset) => set({ hdri: preset }),
   paintColor: "#f1faee",
   setPaintColor: (color) => set({ paintColor: color }),
+  optionals: [],
+  toggleOptional: (id) =>
+    set((s) => ({
+      optionals: s.optionals.includes(id)
+        ? s.optionals.filter((o) => o !== id)
+        : [...s.optionals, id],
+    })),
   interiorMode: "day",
   setInteriorMode: (mode) => set({ interiorMode: mode }),
   lightmapsReady: false,

@@ -2,15 +2,23 @@
 
 import { Environment, ContactShadows } from "@react-three/drei";
 import { useLightingStore } from "../ui/LightingDebug";
+import { useConfigStore } from "@/modules/viewport/store/useConfigStore";
+
+// drei loads these presets from the pmndrs HDRI CDN
+type DreiPreset =
+  | "apartment" | "city" | "dawn" | "forest" | "lobby"
+  | "night" | "park" | "studio" | "sunset" | "warehouse";
 
 export default function Lighting() {
   const params = useLightingStore((s) => s.params);
+  const hdri = useConfigStore((s) => s.hdri) as DreiPreset;
 
   return (
     <>
       <Environment
-        files="/hdri/venice_sunset_1k.hdr"
+        preset={hdri}
         background={false}
+        environmentIntensity={params.environmentIntensity}
         environmentRotation={[0, params.environmentRotation, 0]}
       />
 

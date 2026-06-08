@@ -15,7 +15,7 @@ export default function SectionNav() {
   const resetCamera = useConfigStore((s) => s.resetCamera);
 
   return (
-    <div className="flex items-center gap-1 rounded-full bg-white/10 px-1.5 py-1.5 shadow-lg backdrop-blur-md border border-white/15">
+    <div className="flex items-center gap-1 rounded-full bg-white/95 px-1.5 py-1.5 shadow-lg backdrop-blur-sm border border-black/5">
       {sections.map((section) => {
         const isActive = activeSection === section;
         return (
@@ -26,8 +26,8 @@ export default function SectionNav() {
               rounded-full px-4 py-1.5 text-sm font-medium
               transition-all duration-150 active:scale-95
               ${isActive
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-white/70 hover:bg-white/15 hover:text-white active:bg-white/20"
+                ? "bg-lime-400 text-gray-900 shadow-sm"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200"
               }
             `}
           >

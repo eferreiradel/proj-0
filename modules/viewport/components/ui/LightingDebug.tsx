@@ -10,6 +10,7 @@ export interface LightingParams {
   directionalY: number;
   directionalZ: number;
   environmentRotation: number;
+  environmentIntensity: number;
   aoIntensity: number;
   pointLightIntensity: number;
   pointLightX: number;
@@ -29,7 +30,8 @@ export const useLightingStore = create<LightingStoreState>((set) => ({
     directionalX: 5,
     directionalY: 8,
     directionalZ: 5,
-    environmentRotation: Math.PI / 4,
+    environmentRotation: 0,
+    environmentIntensity: 1,
     aoIntensity: 0,
     pointLightIntensity: 0.8,
     pointLightX: 8,

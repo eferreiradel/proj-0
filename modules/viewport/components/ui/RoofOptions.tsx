@@ -28,8 +28,8 @@ export default function RoofOptions() {
               whitespace-nowrap rounded-full px-4 py-1.5 text-sm font-medium
               transition-all duration-150 active:scale-95
               ${isActive
-                ? "bg-white text-gray-900 shadow-sm"
-                : "text-white/70 hover:bg-white/15 hover:text-white active:bg-white/20"
+                ? "bg-lime-400 text-gray-900 shadow-sm"
+                : "text-gray-600 hover:bg-gray-100 hover:text-gray-900 active:bg-gray-200"
               }
             `}
           >

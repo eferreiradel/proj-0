@@ -12,6 +12,7 @@ const POSITIONS: Record<string, [number, number, number]> = {
   tetto: [9.3, 10.2, -9.9],
   interni: [13.5, 1.4, -0.77],
   galley: [8.8, 3.2, 11.8],
+  checkout: [15.71, 1.76, -0.88],
 };
 
 const TARGETS: Record<string, [number, number, number]> = {
@@ -19,6 +20,7 @@ const TARGETS: Record<string, [number, number, number]> = {
   tetto: [0, 1.0, 0],
   interni: [0, 1.0, 0],
   galley: [0, 1.0, 0],
+  checkout: [0, 1.0, 0],
 };
 
 export default function CameraControls() {

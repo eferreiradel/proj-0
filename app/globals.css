@@ -2,6 +2,9 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
+/* Don't scan static assets (binary files like .eps confuse the class extractor) */
+@source not "../public";
+
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {

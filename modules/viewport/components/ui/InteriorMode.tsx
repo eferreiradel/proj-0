@@ -15,7 +15,7 @@ export default function InteriorModeSwitch() {
 
   return (
     <div className="flex items-center gap-3 px-1">
-      <span className="text-sm font-medium text-white/70">
+      <span className="text-sm font-medium text-gray-600">
         {isNight ? "Night" : "Day"}
       </span>
       <button
@@ -26,12 +26,12 @@ export default function InteriorModeSwitch() {
           relative inline-flex h-8 w-16 items-center rounded-full
           transition-colors duration-300 focus:outline-none
           ${!lightmapsReady ? "cursor-not-allowed opacity-50" : ""}
-          ${isNight ? "bg-white/20" : "bg-white/10"}
-          border border-white/20
+          ${isNight ? "bg-lime-400" : "bg-gray-200"}
+          border border-black/5
         `}
       >
-        <Sun  className="absolute left-1.5 h-4 w-4 text-white/40" />
-        <Moon className="absolute right-1.5 h-4 w-4 text-white/40" />
+        <Sun  className="absolute left-1.5 h-4 w-4 text-gray-500" />
+        <Moon className="absolute right-1.5 h-4 w-4 text-gray-700" />
 
         <span
           className={`
