@@ -30,8 +30,8 @@ export default function ColorPicker() {
             className={`
               relative h-7 w-7 rounded-full border-2 transition-all duration-150 hover:scale-110 active:scale-95
               ${isActive
-                ? "border-white ring-2 ring-white ring-offset-2 ring-offset-transparent"
-                : "border-white/30 hover:border-white/60"
+                ? "border-lime-400 ring-2 ring-lime-400 ring-offset-2 ring-offset-white"
+                : "border-gray-200 hover:border-gray-400"
               }
             `}
             style={{ backgroundColor: color }}

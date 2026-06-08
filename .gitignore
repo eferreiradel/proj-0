@@ -41,3 +41,7 @@ yarn-error.log*
 next-env.d.ts
 *.blend
 *.blend1
+
+# Blender source files (too large for git, not needed at runtime)
+*.blend
+*.blend1
