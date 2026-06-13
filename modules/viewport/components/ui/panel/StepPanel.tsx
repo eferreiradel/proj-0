@@ -22,9 +22,6 @@ export default function StepPanel({ section }: { section: Section }) {
   const setPaintColor = useConfigStore((s) => s.setPaintColor);
   const roofOption = useConfigStore((s) => s.roofOption);
   const setRoofOption = useConfigStore((s) => s.setRoofOption);
-  const interiorMode = useConfigStore((s) => s.interiorMode);
-  const setInteriorMode = useConfigStore((s) => s.setInteriorMode);
-  const lightmapsReady = useConfigStore((s) => s.lightmapsReady);
   const optionals = useConfigStore((s) => s.optionals);
   const toggleOptional = useConfigStore((s) => s.toggleOptional);
 
@@ -68,20 +65,17 @@ export default function StepPanel({ section }: { section: Section }) {
     );
   }
 
-  // ── Interior: ambient + optionals ──────────────────────────────────────────
+  // ── Interior: work in progress ──────────────────────────────────────────────
   if (section === "interni") {
     return (
       <div className="flex flex-col gap-4">
-        <SectionLabel>Ambient</SectionLabel>
-        <Toggle
-          label={interiorMode === "night" ? "Night lighting" : "Day lighting"}
-          value={interiorMode === "night"}
-          onChange={(v) => setInteriorMode(v ? "night" : "day")}
-          disabled={!lightmapsReady}
-        />
-
-        <SectionLabel>Optional extras</SectionLabel>
-        <CheckList items={OPTIONALS} selected={optionals} onToggle={toggleOptional} />
+        <SectionLabel>Interior</SectionLabel>
+        <div className="rounded-[10px] border-[0.5px] border-black/10 bg-gray-50 px-3.5 py-6 text-center">
+          <p className="text-[13px] font-medium text-gray-900">Work in progress</p>
+          <p className="mt-1 text-[11px] text-gray-400">
+            Interior options are still being configured.
+          </p>
+        </div>
       </div>
     );
   }

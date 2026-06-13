@@ -3,15 +3,10 @@
 import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
 import { useGLTF, useAnimations } from '@react-three/drei'
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
 import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
 
 const MODEL_PATH = '/3d/scene/main.glb'
-const LIGHTMAP_PATHS = {
-  day: '/3d/scene/interior_lightmap_day.hdr',
-  night: '/3d/scene/interior_lightmap_night.hdr',
-}
 const SHELL_SLIDE_Y = 12
 
 export function Model() {
@@ -21,10 +16,8 @@ export function Model() {
   const activeSection = useConfigStore((s) => s.activeSection)
   const roofOption = useConfigStore((s) => s.roofOption)
   const paintColor = useConfigStore((s) => s.paintColor)
-  const interiorMode = useConfigStore((s) => s.interiorMode)
-  const setLightmapsReady = useConfigStore((s) => s.setLightmapsReady)
 
-  // Find ext_shell_r node
+    // Find ext_shell_r node
   const shellRef = useRef<THREE.Object3D | null>(null)
   const shellOriginalY = useRef(0)
   useEffect(() => {
@@ -88,97 +81,13 @@ export function Model() {
     }
   }, [gltf.scene])
 
-  // Cache interior day/night materials + the shell_body.002 meshes
-  const dayMat = useRef<THREE.Material | null>(null)
-  const nightMat = useRef<THREE.Material | null>(null)
-  const interiorMeshes = useRef<THREE.Mesh[]>([])
+  // Grab the galley animation action into our own mutable ref so we control its
+  // lifecycle imperatively (three.js AnimationAction is inherently mutable/imperative
+  // and isn't meant to be treated as immutable hook output).
+  const galleyActionRef = useRef<ReturnType<typeof useAnimations>['actions'][string] | null>(null)
   useEffect(() => {
-    // Grab both interior materials wherever they appear in the scene
-    gltf.scene.traverse((child) => {
-      const mesh = child as THREE.Mesh
-      if (!mesh.isMesh) return
-      const mat = mesh.material as THREE.Material
-      if (mat?.name === 'mat_interior_day' && !dayMat.current) dayMat.current = mat
-      if (mat?.name === 'mat_interior_night' && !nightMat.current) nightMat.current = mat
-    })
-
-    // Locate the shell_body.002 node (three.js may sanitize the dot)
-    const shellInterior =
-      gltf.scene.getObjectByName('shell_body.002') ??
-      gltf.scene.getObjectByName('shell_body002') ??
-      gltf.scene.getObjectByName('shell_body_002')
-
-    interiorMeshes.current = []
-    if (shellInterior) {
-      shellInterior.traverse((child) => {
-        const mesh = child as THREE.Mesh
-        if (mesh.isMesh) interiorMeshes.current.push(mesh)
-      })
-    }
-  }, [gltf.scene])
-
-  // Preload BOTH interior lightmaps up-front so the day/night switch is instant
-  const lightmapCache = useRef<Record<string, THREE.Texture>>({})
-  useEffect(() => {
-    let cancelled = false
-    const loader = new RGBELoader()
-
-    const loadOne = (mode: 'day' | 'night') =>
-      new Promise<void>((resolve) => {
-        loader.load(LIGHTMAP_PATHS[mode], (tex) => {
-          tex.colorSpace = THREE.NoColorSpace
-          tex.mapping = THREE.UVMapping
-          tex.flipY = false
-          lightmapCache.current[mode] = tex
-          resolve()
-        }, undefined, () => resolve())
-      })
-
-    setLightmapsReady(false)
-    Promise.all([loadOne('day'), loadOne('night')]).then(() => {
-      if (!cancelled) setLightmapsReady(true)
-    })
-
-    return () => { cancelled = true }
-  }, [setLightmapsReady])
-
-  // Apply interior lightmap based on day/night mode (from preloaded cache)
-  useEffect(() => {
-    const mesh = gltf.scene.getObjectByName('interior') as THREE.Mesh
-    if (!mesh) return
-
-    const applyLightmap = (tex: THREE.Texture) => {
-      const mat = mesh.material as THREE.MeshStandardMaterial
-      if (mat.lightMap === tex) return
-      mat.lightMap = tex
-      mat.lightMapIntensity = 20.0
-      mat.needsUpdate = true
-    }
-
-    const cached = lightmapCache.current[interiorMode]
-    if (cached) {
-      applyLightmap(cached)
-      return
-    }
-
-    // Fallback: load on demand if preload hasn't finished yet
-    new RGBELoader().load(LIGHTMAP_PATHS[interiorMode], (tex) => {
-      tex.colorSpace = THREE.NoColorSpace
-      tex.mapping = THREE.UVMapping
-      tex.flipY = false
-      lightmapCache.current[interiorMode] = tex
-      applyLightmap(tex)
-    })
-  }, [gltf.scene, interiorMode])
-
-  // Swap interior material based on day/night mode
-  useEffect(() => {
-    const target = interiorMode === 'day' ? dayMat.current : nightMat.current
-    if (!target) return
-    interiorMeshes.current.forEach((mesh) => {
-      mesh.material = target
-    })
-  }, [interiorMode, gltf.scene])
+    galleyActionRef.current = actions['galley_up'] ?? null
+  }, [actions])
 
   // GSAP shell slide + galley
   const prevSection = useRef(activeSection)
@@ -207,7 +116,7 @@ export function Model() {
     }
 
     // Galley animation from GLB
-    const galleyUp = actions['galley_up']
+    const galleyUp = galleyActionRef.current
     if (galleyUp) {
       galleyUp.clampWhenFinished = true
       galleyUp.setLoop(THREE.LoopOnce, 1)

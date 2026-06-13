@@ -5,7 +5,6 @@ export type Section = (typeof sections)[number];
 
 export type RoofOption = "liscio" | "crossbars" | "roof_rack_full";
 export type HdriPreset = "studio" | "sunset" | "dawn" | "night" | "warehouse" | "forest" | "apartment" | "lobby" | "city" | "park";
-export type InteriorMode = "day" | "night";
 
 export const PAINT_COLORS = ["#f1faee", "#e63946", "#457b9d", "#f4a261", "#2a9d8f"] as const;
 export type PaintColor = (typeof PAINT_COLORS)[number];
@@ -23,10 +22,6 @@ interface ConfigState {
   setPaintColor: (color: PaintColor) => void;
   optionals: string[];
   toggleOptional: (id: string) => void;
-  interiorMode: InteriorMode;
-  setInteriorMode: (mode: InteriorMode) => void;
-  lightmapsReady: boolean;
-  setLightmapsReady: (ready: boolean) => void;
   isLoaded: boolean;
   setIsLoaded: (loaded: boolean) => void;
 }
@@ -49,10 +44,6 @@ export const useConfigStore = create<ConfigState>((set) => ({
         ? s.optionals.filter((o) => o !== id)
         : [...s.optionals, id],
     })),
-  interiorMode: "day",
-  setInteriorMode: (mode) => set({ interiorMode: mode }),
-  lightmapsReady: false,
-  setLightmapsReady: (ready) => set({ lightmapsReady: ready }),
   isLoaded: false,
   setIsLoaded: (loaded) => set({ isLoaded: loaded }),
 }));
