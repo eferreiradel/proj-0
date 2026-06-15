@@ -32,12 +32,14 @@ export default function StepPanel({ section }: { section: Section }) {
     return (
       <div className="flex flex-col gap-4">
         <SectionLabel>Body paint</SectionLabel>
-        <ColorRow
-          colors={PAINT_OPTIONS.map((p) => p.id)}
-          value={paintColor}
-          onChange={(c) => setPaintColor(c as PaintColor)}
-          labels={paintLabels}
-        />
+        <div className="rounded-[10px] border-[0.5px] border-black/10 px-3.5 py-3">
+          <ColorRow
+            colors={PAINT_OPTIONS.map((p) => p.id)}
+            value={paintColor}
+            onChange={(c) => setPaintColor(c as PaintColor)}
+            labels={paintLabels}
+          />
+        </div>
         <p className="text-xs text-gray-500">
           {current?.label}
           {current && current.price > 0 ? ` · +${formatPrice(current.price)}` : " · included"}
