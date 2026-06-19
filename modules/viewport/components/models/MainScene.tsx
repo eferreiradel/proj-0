@@ -2,7 +2,7 @@
 
 import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
-import { useFrame } from '@react-three/fiber'
+
 import { useGLTF, useAnimations } from '@react-three/drei'
 import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
@@ -140,13 +140,6 @@ export function Model() {
 
     prevSection.current = activeSection
   }, [activeSection, actions])
-
-  // Gentle continuous rotation
-  useFrame((_, delta) => {
-    if (group.current) {
-      group.current.rotation.y += delta * 0.08
-    }
-  })
 
   return (
     <group ref={group}>
