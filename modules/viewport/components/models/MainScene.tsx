@@ -3,7 +3,7 @@
 import * as THREE from 'three'
 import { useRef, useEffect } from 'react'
 
-import { useGLTF, useAnimations } from '@react-three/drei'
+import { useGLTF, useAnimations, useTexture } from '@react-three/drei'
 import { useConfigStore } from '@/modules/viewport/store/useConfigStore'
 import gsap from 'gsap'
 
@@ -54,17 +54,17 @@ export function Model() {
     })
   }, [paintColor, gltf.scene])
 
-  // Ground shadow: apply alpha-mapped texture to the Ground plane
+  // Ground shadow — useTexture registers the asset in useProgress so it
+  // loads in the same batch as the GLB (no second loading cycle).
+  const shadowTex = useTexture('/3d/scene/lightmap_ground.webp')
   useEffect(() => {
+    shadowTex.colorSpace = THREE.NoColorSpace
+    shadowTex.flipY = false
+    shadowTex.anisotropy = 4
+    shadowTex.needsUpdate = true
+
     const ground = gltf.scene.getObjectByName('Ground') as THREE.Mesh
     if (!ground) return
-
-    const loader = new THREE.TextureLoader()
-    const shadowTex = loader.load('/3d/scene/lightmap_ground.webp', (tex) => {
-      tex.colorSpace = THREE.NoColorSpace
-      tex.flipY = false
-      tex.anisotropy = 4
-    })
 
     const oldMat = ground.material as THREE.Material
     ground.material = new THREE.MeshBasicMaterial({
@@ -76,11 +76,7 @@ export function Model() {
     })
     ground.renderOrder = 1
     if (oldMat && oldMat !== ground.material) oldMat.dispose?.()
-
-    return () => {
-      shadowTex.dispose()
-    }
-  }, [gltf.scene])
+  }, [gltf.scene, shadowTex])
 
   // Grab the galley animation action into our own mutable ref so we control its
   // lifecycle imperatively (three.js AnimationAction is inherently mutable/imperative
@@ -149,3 +145,4 @@ export function Model() {
 }
 
 useGLTF.preload(MODEL_PATH)
+useTexture.preload('/3d/scene/lightmap_ground.webp')
